@@ -8,6 +8,7 @@ NAME = minivim
 CC = gcc
 
 CFLAGS += -Wall -Werror -Wextra -pedantic-errors
+CFLAGS += -Wno-unknown-pragmas
 CFLAGS += -fsanitize=address -fsanitize=leak -fsanitize=undefined -fsanitize=bounds -fsanitize=null -g3
 
 # RM
