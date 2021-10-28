@@ -1,0 +1,42 @@
+hello world!
+
+this is just a sample test for test purpouses
+
+and you now, that kind of thing that makes peoples happy beocuse yes im writing a minivim and that makes me go brrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+
+never mind that
+
+bye :3
+
+
+
+	this has a tab
+
+		this has TWO tabs
+
+			i	have	tabs	in	the	middel	jojo
+
+
+
+so, its time
+to
+write
+a
+lot
+of
+lines
+so
+we
+can
+see
+if
+vertical
+scrolling
+is
+really
+working
+fine
+:D
+
+nl
+
