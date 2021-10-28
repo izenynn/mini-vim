@@ -45,6 +45,7 @@ typedef struct e_row {
 /* editor config struct */
 struct editor_conf {
 	int cx, cy;
+	int rx;
 	int y_off;
 	int x_off;
 	int scrn_rows;
@@ -215,6 +216,21 @@ static int get_windows_size(int *rows, int *cols) {
 /*** row operations ***/
 #pragma region row_ops
 
+/* calculate rx */
+static int editor_row_cx_to_rx(e_row *row, int cx) {
+	int rx = 0;
+	int i;
+
+	/* iterate line and calculate len with tabs included */
+	for (i = 0; i < cx; i++) {
+		if (row->line[i] == '\t')
+			rx += (TAB_SIZE - 1) - (rx % TAB_SIZE);
+		rx++;
+	}
+
+	return (rx);
+}
+
 /* update row */
 static void editor_update_row(e_row *row) {
 	int tabs = 0;
@@ -328,16 +344,21 @@ static void apbuff_free(struct apbuff *ab) {
 
 /* check if we can scroll */
 static void editor_scroll() {
+	/* get rx */
+	g_e.rx = 0;
+	if (g_e.cy < g_e.n_rows)
+		g_e.rx = editor_row_cx_to_rx(&g_e.row[g_e.cy], g_e.cx);
+
 	/* handle vertical scroll */
 	if (g_e.cy < g_e.y_off)
 		g_e.y_off = g_e.cy;
 	if (g_e.cy >= g_e.y_off + g_e.scrn_rows)
 		g_e.y_off = g_e.cy - g_e.scrn_rows + 1;
 	/* handle horizontal scroll */
-	if (g_e.cx < g_e.x_off)
-		g_e.x_off = g_e.cx;
-	if (g_e.cx >= g_e.x_off + g_e.scrn_cols)
-		g_e.x_off = g_e.cx - g_e.scrn_cols + 1;
+	if (g_e.rx < g_e.x_off)
+		g_e.x_off = g_e.rx;
+	if (g_e.rx >= g_e.x_off + g_e.scrn_cols)
+		g_e.x_off = g_e.rx - g_e.scrn_cols + 1;
 }
 
 /* draw rows on editor */
@@ -404,7 +425,7 @@ static void editor_refresh_screen() {
 
 	/* get cursor pos and move cursor */
 	char buff[32];
-	snprintf(buff, sizeof(buff), "\x1b[%d;%dH", (g_e.cy - g_e.y_off) + 1, (g_e.cx - g_e.x_off) + 1);
+	snprintf(buff, sizeof(buff), "\x1b[%d;%dH", (g_e.cy - g_e.y_off) + 1, (g_e.rx - g_e.x_off) + 1);
 	apbuff_append(&ab, buff, strlen(buff));
 
 	/* show cursor again (finish drawing) */
@@ -480,6 +501,7 @@ static void init_editor() {
 	/* initisalise vars */
 	g_e.cx = 0;
 	g_e.cy = 0;
+	g_e.rx = 0;
 	g_e.y_off = 0;
 	g_e.x_off = 0;
 	g_e.n_rows = 0;
