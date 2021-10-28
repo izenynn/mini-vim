@@ -481,8 +481,17 @@ static void editor_process_keypress() {
 	} else if (key == K_HOME) {
 		g_e.cx = 0;
 	} else if (key == K_END) {
-		g_e.cx = g_e.scrn_cols - 1;
+		if (g_e.cy < g_e.n_rows)
+			g_e.cx = g_e.row[g_e.cy].sz;
 	} else if (key == K_PAGE_UP || key == K_PAGE_DOWN) {
+		/* positionate cursor before moving a page */
+		if (key == K_PAGE_UP) {
+			g_e.cy = g_e.y_off;
+		} else {
+			g_e.cy = g_e.y_off + g_e.scrn_rows - 1;
+			if (g_e.cy > g_e.n_rows) g_e.cy = g_e.n_rows;
+		}
+		/* move cursor a page */
 		int cnt = g_e.scrn_rows;
 		while (cnt--)
 			editor_move_cursor(key == K_PAGE_UP ? K_ARROW_UP : K_ARROW_DOWN);
