@@ -20,7 +20,8 @@ CC = gcc
 # only dev flags
 CFLAGS += -Wall -Werror -Wextra -pedantic-errors
 CFLAGS += -Wno-unknown-pragmas
-CFLAGS += -fsanitize=address -fsanitize=leak -fsanitize=undefined -fsanitize=bounds -fsanitize=null -g3
+CFLAGS += -fsanitize=address -fsanitize=leak -fsanitize=undefined -fsanitize=bounds -fsanitize=null
+CFLAGS += -g3
 
 # flags
 CFLAGS += -D TAB_SIZE=$(TAB_SIZE)

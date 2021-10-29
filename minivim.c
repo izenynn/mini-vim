@@ -52,6 +52,7 @@ struct editor_conf {
 	int scrn_cols;
 	int n_rows;
 	e_row *row;
+	char *filename;
 	struct termios org_termios;
 };
 
@@ -255,6 +256,7 @@ static void editor_update_row(e_row *row) {
 			row->rend[idx++] = row->line[i];
 		}
 	}
+
 	/* set '\0' at end of string and set render size */
 	row->rend[idx] = '\0';
 	row->r_sz = idx;
@@ -289,6 +291,10 @@ static void editor_append_row(char *s, size_t len) {
 #pragma region file_io
 
 static void editor_open(const char *filename) {
+	/* set filename */
+	free(g_e.filename);
+	g_e.filename = strdup(filename);
+
 	/* open file */
 	FILE *fp = fopen(filename, "r");
 	if (!fp)
@@ -402,9 +408,39 @@ static void editor_draw_rows(struct apbuff *ab) {
 		/* erase part of the line to the right of the cursor */
 		apbuff_append(ab, "\x1b[K", 3);
 		/* dont write a new line on the last row */
-		if (y < g_e.scrn_rows - 1)
-			apbuff_append(ab, "\r\n", 2);
+		apbuff_append(ab, "\r\n", 2);
 	}
+}
+
+/* draw status bar */
+static void editor_draw_status_bar(struct apbuff *ab) {
+	/* invert draw color */
+	apbuff_append(ab, "\x1b[7m", 4);
+
+	/* draw file name */
+	char status[80];
+	char r_status[80];
+	/* get filename and file lines */
+	int len = snprintf(status, sizeof(status), "\"%.20s\" %dL", g_e.filename ? g_e.filename : "[No Name]", g_e.n_rows);
+	/* get current line and total lines */
+	int r_len = snprintf(r_status, sizeof(r_status), "%d/%d", g_e.cy + 1, g_e.n_rows);
+	/* append file name and file lines */
+	if (len > g_e.scrn_cols) len = g_e.scrn_cols;
+	apbuff_append(ab, status, len);
+
+	/* draw status bar */
+	while (len < g_e.scrn_cols) {
+		if (g_e.scrn_cols - len == r_len) {
+			apbuff_append(ab, r_status, r_len);
+			break;
+		} else {
+			apbuff_append(ab, " ", 1);
+			len++;
+		}
+	}
+
+	/* reset draw color */
+	apbuff_append(ab, "\x1b[m", 3);
 }
 
 /* refresh editor screen */
@@ -422,6 +458,8 @@ static void editor_refresh_screen() {
 
 	/* draw rows */
 	editor_draw_rows(&ab);
+	/* draw status bar (last row) */
+	editor_draw_status_bar(&ab);
 
 	/* get cursor pos and move cursor */
 	char buff[32];
@@ -474,6 +512,13 @@ static void editor_process_keypress() {
 	key = editor_read_key();
 
 	if (key == CTRL_KEY('q')) {
+		//TODO free all
+		/* free all */
+		//free(g_e.filename);
+		//free(g_e.row[?].line)
+		//free(g_e.row[?].rend)
+		//free(g_e.row);
+
 		/* clear screen and move cursor before exit */
 		write(STDOUT_FILENO, "\x1b[2J", 4);
 		write(STDOUT_FILENO, "\x1b[H", 3);
@@ -515,10 +560,14 @@ static void init_editor() {
 	g_e.x_off = 0;
 	g_e.n_rows = 0;
 	g_e.row = NULL;
+	g_e.filename = NULL;
 
 	/* get window size */
 	if (get_windows_size(&g_e.scrn_rows, &g_e.scrn_cols) == -1)
 		die("get_window_size");
+	
+	/* remove one row, it will be for the status bar */
+	g_e.scrn_rows--;
 }
 
 /* main */
