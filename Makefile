@@ -26,7 +26,13 @@ CFLAGS += -g3
 # flags
 CFLAGS += -D TAB_SIZE=$(TAB_SIZE)
 
-#LDFLAGS = -L
+######################################################################
+#                                LIBS                                #
+######################################################################
+
+CFLAGS += -I ./inc
+
+#LDFLAGS = -L ./inc
 
 # ncurses will be probably implemented in the future, right now only supports VT100 escapes
 #LDLIBS = -lncurses
@@ -40,12 +46,26 @@ RM = rm
 RMFLAGS = -rf
 
 ######################################################################
+#                               PATHS                                #
+######################################################################
+
+SRC_PATH = src
+
+OBJ_PATH = obj
+
+######################################################################
 #                                SRC                                 #
 ######################################################################
 
-SRC = minivim.c
+SRC_FILES =		main.c			init.c			input.c			\
+				output.c		append_buff.c	find.c			\
+				file_io.c		editor_ops.c	row_ops.c		\
+				syntax_hl.c		terminal.c
 
-OBJ = $(SRC:%.c=%.o)
+OBJ_FILES = $(SRC_FILES:%.c=%.o)
+
+SRC = $(addprefix $(SRC_PATH)/, $(SRC_FILES))
+OBJ = $(addprefix $(OBJ_PATH)/, $(OBJ_FILES))
 
 ######################################################################
 #                               RULES                                #
@@ -58,11 +78,14 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS) $(LDLIBS)
 
-%.o: %.c
+$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c | $(OBJ_PATH)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+$(OBJ_PATH):
+	mkdir -p $(OBJ_PATH) 2> /dev/null
+
 clean:
-	$(RM) $(RMFLAGS) $(OBJ)
+	$(RM) $(RMFLAGS) $(OBJ_PATH)
 
 fclean: clean
 	$(RM) $(RMFLAGS) $(NAME)
