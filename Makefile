@@ -17,12 +17,6 @@ NAME = minivim
 
 CC = gcc
 
-# only dev flags
-CFLAGS += -Wall -Werror -Wextra -pedantic-errors
-CFLAGS += -Wno-unknown-pragmas
-CFLAGS += -fsanitize=address -fsanitize=leak -fsanitize=undefined -fsanitize=bounds -fsanitize=null
-CFLAGS += -g3
-
 # flags
 CFLAGS += -D TAB_SIZE=$(TAB_SIZE)
 
@@ -68,10 +62,32 @@ SRC = $(addprefix $(SRC_PATH)/, $(SRC_FILES))
 OBJ = $(addprefix $(OBJ_PATH)/, $(OBJ_FILES))
 
 ######################################################################
+#                                IF                                  #
+######################################################################
+
+DEV=0;
+ifeq ($(DEV), 1)
+	# common flags
+	CFLAGS += -Wall -Werror -Wextra
+	CFLAGS += -Wno-unknown-pragmas
+	# check OS
+	UNAME_S := $(shell uname -s)
+	ifeq ($(UNAME_S),Linux)
+		CFLAGS += -pedantic-erros
+		CFLAGS += -fsanitize=address -fsanitize=leak -fsanitize=undefined -fsanitize=bounds -fsanitize=null
+		CFLAGS += -g3
+	endif
+	ifeq ($(UNAME_S),Darwin)
+		CFLAGS += -fsanitize=address
+		CFLAGS += -g3
+	endif
+endif
+
+######################################################################
 #                               RULES                                #
 ######################################################################
 
-.PHONY: all clean fclean re
+.PHONY: all dev clean fclean re
 
 all: $(NAME)
 
