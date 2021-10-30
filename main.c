@@ -1,5 +1,7 @@
-#define DEFINE_I
 #include <minivim.h>
+
+/* editor_conf global var */
+struct editor_conf g_e;
 
 /* main */
 int main(int argc, char *argv[]) {
