@@ -11,9 +11,9 @@ It uses `VT100` escape characters (I will implement `ncurses` in the future prob
 - [x] enter terminal raw mode
 - [x] basic input / output
 - [x] view files
-- [ ] edit files
-- [ ] syntax highlighing
-- [ ] search feature
+- [x] edit files
+- [x] syntax highlighing
+- [x] search feature
 - [ ] basic vim features
 
 ##
