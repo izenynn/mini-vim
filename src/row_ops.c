@@ -57,6 +57,8 @@ void editor_update_row(e_row *row) {
 			row->rend[idx++] = ' ';
 			while (idx % TAB_SIZE)
 				row->rend[idx++] = ' ';
+		} else if (row->line[i] == ' ') {
+			row->rend[idx++] = ' ';
 		} else {
 			row->rend[idx++] = row->line[i];
 		}

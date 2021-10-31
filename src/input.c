@@ -137,6 +137,17 @@ void editor_process_keypress() {
 			int cnt = g_e.scrn_rows;
 			while (cnt--)
 				editor_move_cursor(key == K_PAGE_UP ? K_ARROW_UP : K_ARROW_DOWN);
+		/* go to end of file */
+		} else if (key == 'G') {
+			g_e.cy = g_e.n_rows - 1;
+			g_e.cx = g_e.row[g_e.cy].sz - 1;
+		/* go to top of file */
+		} else if (key == 'g') {
+			key = editor_read_key();
+			if (key == 'g') {
+				g_e.cy = 0;
+				g_e.cx = 0;
+			}
 		}
 	/* insert mode */
 	} else if (g_e.mode == INSERT_MODE) {

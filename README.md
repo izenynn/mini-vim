@@ -48,8 +48,11 @@ cd ./minivim && make
 	- add new line and change mode with `o` and `O`
 	- move with `h`, `j`, `k`, `l` in normal mode
 	- move to start of line with `$` and end of line with `^`
-
+	- move to start of file with `gg` and end with `G`
 - TODO:
+	- delete line with `dd`
+	- copy line with `yy`
+	- paste delete line with `p` or `P`
 	- commands `:w`, `:q`, `:wq`, `:q!`
 	- command `:saveas [NAME]` to save files
 	- search with `/[SEARCH]`, `n` for next occurrence and `N` for previous
