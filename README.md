@@ -44,7 +44,12 @@ cd ./minivim && make
 - C and C++ syntax highlighting
 - Vim features:
 	- normal move and insert mode
+	- change mode with `i` and `a`
+	- add new line and change mode with `o` and `O`
 	- move with `h`, `j`, `k`, `l` in normal mode
+	- move to start of line with `$` and end of line with `^`
+
+- TODO:
 	- commands `:w`, `:q`, `:wq`, `:q!`
 	- command `:saveas [NAME]` to save files
 	- search with `/[SEARCH]`, `n` for next occurrence and `N` for previous

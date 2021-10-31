@@ -29,6 +29,9 @@
 # define CTRL_KEY(k) ((k) & 0x1f)
 # define APBUFF_INIT {NULL, 0}
 
+# define NORMAL_MODE 0
+# define INSERT_MODE 1
+
 # define C_HL_EXT_SIZE 6
 # define C_HL_KEYW_SIZE 82
 # define HLDB_SIZE 1
@@ -101,6 +104,8 @@ struct editor_conf {
 	int dirty;
 	char *filename;
 	char status_msg[80];
+	/* 0: normal, 1: insert */
+	int	mode;
 	struct e_syntax *syntax;
 	struct termios org_termios;
 };

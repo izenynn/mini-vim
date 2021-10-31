@@ -73,11 +73,12 @@ ifeq ($(DEV), 1)
 	# check OS
 	UNAME_S := $(shell uname -s)
 	ifeq ($(UNAME_S),Linux)
-		CFLAGS += -pedantic-erros
+		CFLAGS += -pedantic
 		CFLAGS += -fsanitize=address -fsanitize=leak -fsanitize=undefined -fsanitize=bounds -fsanitize=null
 		CFLAGS += -g3
 	endif
 	ifeq ($(UNAME_S),Darwin)
+		CFLAGS += -pedantic
 		CFLAGS += -fsanitize=address
 		CFLAGS += -g3
 	endif

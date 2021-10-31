@@ -15,6 +15,7 @@ void init_editor() {
 	g_e.dirty = 0;
 	g_e.filename = NULL;
 	g_e.status_msg[0] = '\0';
+	g_e.mode = NORMAL_MODE;
 	g_e.syntax = NULL;
 
 	/* get window size */
