@@ -146,7 +146,7 @@ void editor_row_insert_char(e_row *row, int idx, int c) {
 		idx = row->sz;
 
 	/* realloc line so it can store one more char */
-	row->line = realloc(row->line, row->sz + 2);
+	row->line = (char *)realloc(row->line, row->sz + 2);
 	/* shift line one position from where we will add the char */
 	/* memmove to prevent overlap, we are in the same string */
 	memmove(&row->line[idx + 1], &row->line[idx], row->sz - idx + 1);
@@ -163,7 +163,7 @@ void editor_row_insert_char(e_row *row, int idx, int c) {
 /* append str to a row */
 void editor_row_append_str(e_row *row, char *s, size_t len) {
 	/* allocate space for the append */
-	row->line = realloc(row->line, row->sz + len + 1);
+	row->line = (char *)realloc(row->line, row->sz + len + 1);
 	/* append string */
 	memcpy(&row->line[row->sz], s, len);
 	/* update row size */

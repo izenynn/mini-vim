@@ -140,7 +140,7 @@ void apbuff_append(struct apbuff *ab, const char *s, int len);
 void apbuff_free(struct apbuff *ab);
 
 /* find.c */
-void editor_find_callback(char *query, int key);
+void editor_find_callback(char *query, int n);
 void editor_find();
 
 /* file_io.c */

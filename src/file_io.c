@@ -35,8 +35,12 @@ void editor_open(const char *filename) {
 
 	/* open file */
 	FILE *fp = fopen(filename, "r");
-	if (!fp)
-		die("fopen");
+	if (!fp) {
+		fp = fopen(filename, "w");
+		if (!fp) {
+			die("fopen");
+		}
+	}
 
 	/* read file */
 	char *line = NULL;
@@ -62,13 +66,8 @@ void editor_open(const char *filename) {
 void editor_save() {
 	/* if is a new file (with no name of course) return */
 	if (g_e.filename == NULL) {
-		g_e.filename = editor_prompt("Save as: %s", NULL);
-		if (g_e.filename == NULL) {
-			editor_set_status_msg("Save aborted");
-			return;
-		}
-		/* update syntax file type and see if it matchs now */
-		editor_select_syntax_hl();
+		editor_set_status_msg("\x1b[41mERROR: no file name\x1b[m");
+		return;
 	}
 
 	/* get string of all the file */
@@ -92,8 +91,7 @@ void editor_save() {
 				/* reset dirty */
 				g_e.dirty = 0;
 				/* set status bar message */
-				// TODO add file size in bytes and colors
-				editor_set_status_msg("\"%.20s\" %dL, %dC, written", g_e.filename ? g_e.filename : "[No Name]", g_e.n_rows, 0);
+				editor_set_status_msg("\"%.20s\" %dL, written", g_e.filename ? g_e.filename : "[No Name]", g_e.n_rows);
 				return;
 			}
 		}

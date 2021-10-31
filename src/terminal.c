@@ -6,6 +6,10 @@ void die(const char *s) {
 	write(STDOUT_FILENO, "\x1b[2J", 4);
 	write(STDOUT_FILENO, "\x1b[H", 3);
 
+	/* restore terminal */
+	dis_raw_mode();
+
+	/* print error and exit */
 	perror(s);
 	exit (EXIT_FAILURE);
 }
@@ -27,7 +31,7 @@ void enb_raw_mode() {
 
 	/* get terminal's attributes */
 	raw = g_e.org_termios;
-	/* bitwise terminal's attribute flags */
+	/* terminal flags */
 	raw.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
 	raw.c_oflag &= ~(OPOST);
 	raw.c_lflag &= ~(ECHO | ICANON | IEXTEN | ISIG);

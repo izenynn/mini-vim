@@ -38,7 +38,7 @@ void editor_draw_rows(struct apbuff *ab) {
 					welcome_l = g_e.scrn_cols;
 				int padding = (g_e.scrn_cols - welcome_l) / 2;
 				if (padding) {
-					apbuff_append(ab, "~", 1);
+					apbuff_append(ab, "\x1b[34m~\x1b[m", 9);
 					padding--;
 				}
 				while (padding--)
@@ -47,7 +47,7 @@ void editor_draw_rows(struct apbuff *ab) {
 			/* there is a document but no more rows to print */
 			} else {
 				/* if nothing to draw */
-				apbuff_append(ab, "~", 1);
+				apbuff_append(ab, "\x1b[34m~\x1b[m", 9);
 			}
 		/* draw actual row */
 		} else {
@@ -66,6 +66,7 @@ void editor_draw_rows(struct apbuff *ab) {
 			for (i = 0; i < len; i++) {
 				/* handle cursor */
 				if (g_e.mode == NORMAL_MODE && y == g_e.cy - g_e.y_off && i == g_e.rx - g_e.x_off) {
+					/* change color on cursor position only */
 					apbuff_append(ab, "\x1b[m", 4);
 					apbuff_append(ab, "\x1b[7m", 4);
 					apbuff_append(ab, &c[i], 1);
@@ -142,13 +143,11 @@ void editor_draw_status_bar(struct apbuff *ab) {
 	char status[80];
 	char r_status[80];
 	/* get filename and file lines */
-	/* TODO write file size in chars like sublivim */
 	int len = snprintf(status, sizeof(status), "%.20s %s",
 		g_e.filename ? g_e.filename : "[No Name]",
 		g_e.dirty ? "[+] " : "");
 	/* get status bar end string data */
 	int r_len;
-	// TODO print botton right correctly (like sublivim)
 	/* get status bar end string */
 	r_len = snprintf(r_status, sizeof(r_status), "%s | %d/%d",
 		g_e.syntax ? g_e.syntax->f_type : "no ft",

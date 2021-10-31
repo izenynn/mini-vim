@@ -6,6 +6,8 @@ A "mini" implementation of vim :3
 
 It uses `VT100` escape characters (I will implement `ncurses` in the future probably).
 
+P.S. I know they are way too much comments, sorry for that. I do this project for learning purpouses, so I comment everything I do for that reason ":D
+
 ## How to  use
 
 - Clone the repo
@@ -49,10 +51,6 @@ cd ./minivim && make
 	- move with `h`, `j`, `k`, `l` in normal mode
 	- move to start of line with `$` and end of line with `^`
 	- move to start of file with `gg` and end with `G`
-- TODO:
-	- delete line with `dd`
-	- copy line with `yy`
-	- paste delete line with `p` or `P`
 	- commands `:w`, `:q`, `:wq`, `:q!`
 	- command `:saveas [NAME]` to save files
 	- search with `/[SEARCH]`, `n` for next occurrence and `N` for previous

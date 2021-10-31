@@ -21,8 +21,15 @@ char *editor_prompt(char *prompt, void (*callback)(char *, int)) {
 		int key = editor_read_key();
 		/* handle delete keys */
 		if (key == K_DEL || key == CTRL_KEY('h') || key == K_BACKSPACE) {
-			if (buff_l != 0)
+			if (buff_l != 0) {
 				buff[--buff_l] = '\0';
+			} else if (buff_l == 0) {
+				editor_set_status_msg("");
+				/* callback */
+				if (callback) callback(buff, key);
+				free(buff);
+				return (NULL);
+			}
 		/* quit prompt if ESC is pressed */
 		} else if (key == '\x1b') {
 			editor_set_status_msg("");
@@ -61,6 +68,7 @@ void editor_move_cursor(int key) {
 	e_row *row = (g_e.cy >= g_e.n_rows) ? NULL : &g_e.row[g_e.cy];
 	int right_off = g_e.mode == NORMAL_MODE ? 1 : 0;
 
+	/* handle key */
 	if (key == K_ARROW_UP || key == 'k') {
 		if (g_e.cy != 0) {
 			g_e.cy--;
@@ -82,10 +90,11 @@ void editor_move_cursor(int key) {
 		}
 	}
 
+	/* positionate cursor at end of line */
 	row = (g_e.cy >= g_e.n_rows) ? NULL : &g_e.row[g_e.cy];
 	int row_l = row ? row->sz : 0;
 	if (g_e.cx > row_l) {
-		g_e.cx = row_l;
+		g_e.cx = row_l - right_off;
 	}
 }
 
@@ -97,8 +106,71 @@ void editor_process_keypress() {
 
 	/* normal mode */
 	if (g_e.mode == NORMAL_MODE) {
+		/* prompt */
+		if (key == ':') {
+			/* change to insert mode */
+			g_e.mode = INSERT_MODE;
+			char *cmd = editor_prompt(":%s", NULL);
+			/* if no command is inserted */
+			if (!cmd) {
+				editor_set_status_msg("");
+			/* do stuff */
+			} else if (!strcmp(cmd, "w")) {
+				/* save */
+				editor_save();
+			/* exit if there are no changes */
+			} else if (!strcmp(cmd, "q") && g_e.dirty == 0) {
+				/* clear screen and move cursor before exit */
+				write(STDOUT_FILENO, "\x1b[2J", 4);
+				write(STDOUT_FILENO, "\x1b[H", 3);
+				exit(EXIT_SUCCESS);
+			/* exit but not saved changes (dirty is not 0) */
+			} else if (!strcmp(cmd, "q")) {
+				/* not saved changes */
+				editor_set_status_msg("\x1b[41mERROR: no write since last change (add ! to override)\x1b[m");
+			/* force exist with out saving */
+			} else if (!strcmp(cmd, "q!")) {
+				/* clear screen and move cursor before exit */
+				write(STDOUT_FILENO, "\x1b[2J", 4);
+				write(STDOUT_FILENO, "\x1b[H", 3);
+				exit(EXIT_SUCCESS);
+			/* save and exit */
+			} else if (!strcmp(cmd, "wq")) {
+				/* save */
+				editor_save();
+				/* clear screen and move cursor before exit */
+				write(STDOUT_FILENO, "\x1b[2J", 4);
+				write(STDOUT_FILENO, "\x1b[H", 3);
+				exit(EXIT_SUCCESS);
+			/* save as */
+			} else if (!strncmp(cmd, "saveas ", 7)) {
+				/* get file name */
+				int fname_l;
+				fname_l = strlen(cmd + 7);
+				if (fname_l < 0) {
+					/* error, no name */
+					editor_set_status_msg("\x1b[41mERROR: argument required\x1b[m");
+				}
+				char *fname = (char *)malloc(fname_l + 1);
+				memcpy(fname, cmd + 7, fname_l);
+				fname[fname_l] = '\0';
+				g_e.filename = fname;
+				/* update syntax file type and see if it matchs now */
+				editor_select_syntax_hl();
+				/* save */
+				editor_save();
+			} else {
+				/* not an editor command */
+				editor_set_status_msg("\x1b[41mERROR: not an editor command: %s\x1b[m", cmd);
+			}
+			/* free and return to normal mode */
+			if (cmd) free(cmd);
+			g_e.mode = NORMAL_MODE;
+		/* search for a keyword */
+		} else if (key == '/') {
+			editor_find();
 		/* move keys */
-		if (key == 'k' || key == 'j' || key == 'h' || key == 'l'
+		} else if (key == 'k' || key == 'j' || key == 'h' || key == 'l'
 			|| key == K_ARROW_UP || key == K_ARROW_DOWN || key == K_ARROW_LEFT || key == K_ARROW_RIGHT) {
 			editor_move_cursor(key);
 		/* insert keys */
@@ -118,8 +190,14 @@ void editor_process_keypress() {
 			}
 			editor_set_status_msg("-- INSERT --");
 		/* home key */
-		} else if (key == '^' || key == K_HOME) {
+		} else if (key == '0' || key == K_HOME) {
 			g_e.cx = 0;
+		/* firts non blank */
+		} else if (key == '^') {
+			g_e.cx = 0;
+			while((g_e.row[g_e.cy].line[g_e.cx] == '\t' || g_e.row[g_e.cy].line[g_e.cx] == ' ')
+				&& g_e.cx < g_e.row[g_e.cy].sz - 1)
+				g_e.cx++;
 		/* end key */
 		} else if (key == '$' || key == K_END) {
 			if (g_e.cy < g_e.n_rows && g_e.row[g_e.cy].sz > 0)
@@ -154,15 +232,6 @@ void editor_process_keypress() {
 		/* new line */
 		if (key == '\r') {
 			editor_insert_nl();
-		/* Ctrl-Q (currently quit the program) */
-		} else if (key == CTRL_KEY('q')) {
-			/* clear screen and move cursor before exit */
-			write(STDOUT_FILENO, "\x1b[2J", 4);
-			write(STDOUT_FILENO, "\x1b[H", 3);
-			exit(EXIT_SUCCESS);
-		/* Ctrl-S (save key) */
-		} else if (key == CTRL_KEY('s')) {
-			editor_save();
 		/* home key */
 		} else if (key == K_HOME) {
 			g_e.cx = 0;
@@ -170,9 +239,6 @@ void editor_process_keypress() {
 		} else if (key == K_END) {
 			if (g_e.cy < g_e.n_rows)
 				g_e.cx = g_e.row[g_e.cy].sz;
-		/* Ctrl-F (search) */
-		} else if (key == CTRL_KEY('f')) {
-			editor_find();
 		/* delete keys */
 		} else if (key == K_BACKSPACE || key == CTRL_KEY('h') || key == K_DEL) {
 			if (key == K_DEL)
