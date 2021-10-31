@@ -47,15 +47,18 @@ Editor features:
 - C and C++ syntax highlighting.
 
 Vim features:
-- normal move and insert mode
-- change mode with `i` and `a`
-- add new line and change mode with `o` and `O`
-- move with `h`, `j`, `k`, `l` in normal mode
-- move to start of line with `$` and end of line with `^`
-- move to start of file with `gg` and end with `G`
-- commands `:w`, `:q`, `:wq`, `:q!`
-- command `:saveas [NAME]` to save files
-- search with `/[SEARCH]`, `n` for next occurrence and `N` for previous
+- `normal` and `insert` mode.
+- `i`, `a`: change to insert mode.
+- `o`, `O`: insert new line.
+- `h`, `j`, `k`, `l`: move around (also: arrows).
+- `0`: move to first character in the line (also: home key).
+- `^`: move to first non-blank character in the line.
+- `$`: move to last character in the line (also: end key).
+- `gg`: goto first line.
+- `G`: goto last line.
+- `:w`, `:q`, `:q!`, `:wq`: supported commands.
+- `:saveas [NAME]`: supported command.
+- `/[MATCH]`: supported command (`n`, `N`: move to next and previous occurrence).
 
 ##
 [![forthebadge](https://forthebadge.com/images/badges/made-with-c.svg)](https://forthebadge.com)
