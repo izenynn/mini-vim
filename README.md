@@ -40,14 +40,14 @@ cd ./minivim && make
 
 ## Features
 
-- [x] edit any text file
-- [x] C and C++ syntax highlighting
-- [x] Vim features:
-	- [x] normal move and insert mode
-	- [x] move with `h`, `j`, `k`, `l` in normal mode
-	- [x] commands `:w`, `:q`, `:wq`, `:q!`
-	- [x] command `:saveas [NAME]` to save files
-	- [x] search with `/[SEARCH]`, `n` for next occurrence and `N` for previous
+- edit any text file
+- C and C++ syntax highlighting
+- Vim features:
+	- normal move and insert mode
+	- move with `h`, `j`, `k`, `l` in normal mode
+	- commands `:w`, `:q`, `:wq`, `:q!`
+	- command `:saveas [NAME]` to save files
+	- search with `/[SEARCH]`, `n` for next occurrence and `N` for previous
 
 ##
 [![forthebadge](https://forthebadge.com/images/badges/made-with-c.svg)](https://forthebadge.com)
