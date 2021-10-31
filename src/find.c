@@ -31,6 +31,12 @@ void editor_find_callback(char *query, int key) {
 			dir = 1;
 		} else if (key == 'N') {
 			dir = -1;
+		/* if not valid input */
+		} else {
+			/* get another key input */
+			key = editor_read_key();
+			/* and loop again */
+			continue;
 		}
 
 		/* check last_match */
