@@ -218,7 +218,7 @@ void editor_process_keypress() {
 		/* go to end of file */
 		} else if (key == 'G') {
 			g_e.cy = g_e.n_rows - 1;
-			g_e.cx = g_e.row[g_e.cy].sz - 1;
+			g_e.cx = 0;
 		/* go to top of file */
 		} else if (key == 'g') {
 			key = editor_read_key();
