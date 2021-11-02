@@ -66,7 +66,7 @@ Vim features:
 - `G`: goto last line.
 - `:w`, `:q`, `:q!`, `:wq`: supported commands.
 - `:saveas [NAME]`: supported command.
-- `/[MATCH]`: supported command (`n`, `N`: move to next and previous occurrence).
+- `/[MATCH]`: supported command (`n`, `N`: move to next / previous occurrence).
 
 ##
 [![forthebadge](https://forthebadge.com/images/badges/made-with-c.svg)](https://forthebadge.com)
