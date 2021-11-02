@@ -11,6 +11,8 @@ TAB_SIZE = 4
 NAME = minivim
 #NAME = mvm
 
+BIN_DIR ?= /usr/local
+
 ######################################################################
 #                              COMPILER                              #
 ######################################################################
@@ -91,6 +93,9 @@ endif
 .PHONY: all dev clean fclean re
 
 all: $(NAME)
+
+install: $(NAME)
+	install $(NAME) $(BIN_DIR)/bin
 
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS) $(LDLIBS)

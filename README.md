@@ -8,36 +8,44 @@ It uses `VT100` escape characters (I will implement `ncurses` in the future prob
 
 P.S. I know they are way too much comments, sorry for that. I do this project for learning purpouses, so I comment everything I do for that reason ":D
 
-## How to  use
+## How to use
 
-- Clone the repo
+Clone the repo
 
 ```sh
 git clone https://github.com/izenynn/minivim.git
 ```
 
-- Run make inside the repo
+Run make inside the repo
 
 ```sh
 cd ./minivim && make
 ```
 
-- Open a file using minivim
+Open a file using minivim (it will create the file if it does not exists)
 
 ```sh
 ./minivim [FILE]
 ```
 
-- Create a new file
-
-```sh
-./minivim [FILE]
-```
-
-- or name it later
+- or create a file with no name, and name it later with vim command `:saveas`
 
 ```sh
 ./minivim
+```
+
+## How to install
+
+If you want to add minivim to your path and be able to use it in any directory like any other command, run `make install`
+
+```sh
+make install
+```
+
+In case it gives you permissions error, try running it with `sudo`
+
+```sh
+sudo make install
 ```
 
 ## Features
