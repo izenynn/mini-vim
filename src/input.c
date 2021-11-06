@@ -181,12 +181,20 @@ void editor_process_keypress() {
 			if (key == 'a') {
 				editor_move_cursor(K_ARROW_RIGHT);
 			} else if (key == 'o' || key == 'O') {
-				if (key == 'O') editor_move_cursor(K_ARROW_UP);
+				/* move cursor to start of line */
+				if (key == 'O') {
+					g_e.cx = 0;
+				}
 				/* move cursor to end of line */
-				if (g_e.cy < g_e.n_rows)
-					g_e.cx = g_e.row[g_e.cy].sz;
+				if (key == 'o') {
+					if (g_e.cy < g_e.n_rows)
+						g_e.cx = g_e.row[g_e.cy].sz;
+				}
 				/* insert nl from there */
 				editor_insert_nl();
+				/* move to correct line */
+				if (key == 'O')
+					editor_move_cursor(K_ARROW_UP);
 			}
 			editor_set_status_msg("-- INSERT --");
 		/* home key */
