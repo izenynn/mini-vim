@@ -4,6 +4,8 @@
 
 TAB_SIZE = 4
 
+UNAME_S := $(shell uname -s)
+
 ######################################################################
 #                                NAME                                #
 ######################################################################
@@ -64,29 +66,6 @@ SRC = $(addprefix $(SRC_PATH)/, $(SRC_FILES))
 OBJ = $(addprefix $(OBJ_PATH)/, $(OBJ_FILES))
 
 ######################################################################
-#                                IF                                  #
-######################################################################
-
-DEV=0;
-ifeq ($(DEV), 1)
-	# common flags
-	CFLAGS += -Wall -Werror -Wextra
-	CFLAGS += -Wno-unknown-pragmas
-	# check OS
-	UNAME_S := $(shell uname -s)
-	ifeq ($(UNAME_S),Linux)
-		CFLAGS += -pedantic
-		CFLAGS += -fsanitize=address -fsanitize=leak -fsanitize=undefined -fsanitize=bounds -fsanitize=null
-		CFLAGS += -g3
-	endif
-	ifeq ($(UNAME_S),Darwin)
-		CFLAGS += -pedantic
-		CFLAGS += -fsanitize=address
-		CFLAGS += -g3
-	endif
-endif
-
-######################################################################
 #                               RULES                                #
 ######################################################################
 
@@ -99,6 +78,14 @@ install: $(NAME)
 
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS) $(LDLIBS)
+
+ifeq ($(UNAME_S),Linux)
+debug: CFLAGS += -pedantic -fsanitize=address -fsanitize=leak -fsanitize=undefined -fsanitize=bounds -fsanitize=null -g3
+endif
+ifeq ($(UNAME_S),Darwin)
+debug: CFLAGS += -pedantic -fsanitize=address -g3
+endif
+debug: $(NAME)
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c | $(OBJ_PATH)
 	$(CC) $(CFLAGS) -c $< -o $@
