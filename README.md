@@ -8,6 +8,8 @@ It uses `VT100` escape characters (I will implement `ncurses` in the future prob
 
 P.S. I know they are way too much comments, sorry for that. I do this project for learning purpouses, so I comment everything I do for that reason ":D
 
+*NOTE: In terminals like alacritty that reverses the current cursor position by default, the cursor highlighting may not workd as expected (probably you will not be able to see the cursor).*
+
 ## How to use
 
 Clone the repo
