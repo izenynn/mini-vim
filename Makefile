@@ -80,12 +80,12 @@ $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS) $(LDLIBS)
 
 ifeq ($(UNAME_S),Linux)
-debug: CFLAGS += -pedantic -fsanitize=address -fsanitize=leak -fsanitize=undefined -fsanitize=bounds -fsanitize=null -g3
+sanitize: CFLAGS += -pedantic -fsanitize=address -fsanitize=leak -fsanitize=undefined -fsanitize=bounds -fsanitize=null -g3
 endif
 ifeq ($(UNAME_S),Darwin)
-debug: CFLAGS += -pedantic -fsanitize=address -g3
+sanitize: CFLAGS += -pedantic -fsanitize=address -g3
 endif
-debug: $(NAME)
+sanitize: $(NAME)
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c | $(OBJ_PATH)
 	$(CC) $(CFLAGS) -c $< -o $@
