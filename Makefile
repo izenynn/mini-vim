@@ -13,7 +13,7 @@ UNAME_S := $(shell uname -s)
 NAME = minivim
 #NAME = mvm
 
-BIN_DIR ?= /usr/local
+BIN_DIR ?= /usr/local/bin
 
 ######################################################################
 #                              COMPILER                              #
@@ -77,7 +77,7 @@ OBJ = $(addprefix $(OBJ_PATH)/, $(OBJ_FILES))
 all: $(NAME)
 
 install: $(NAME)
-	install $(NAME) $(BIN_DIR)/bin
+	install $(NAME) $(BIN_DIR)
 
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS) $(LDLIBS)

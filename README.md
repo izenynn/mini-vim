@@ -54,6 +54,18 @@ In case it gives you permissions error, try running it with `sudo`
 sudo make install
 ```
 
+*NOTE: if you are having the issue I described before with the cursor highlighting, you will need to also install with CURSOR_HL=0.*
+
+```sh
+sudo make install CURSOR_HL=0
+```
+
+*NOTE: to change the directory in which the binary is installed, you can compile with BIN_DIR="/usr/local" (just an example).*
+
+```sh
+sudo make install BIN_DIR="/usr/local/bin"
+```
+
 ## Features
 
 Editor features:
