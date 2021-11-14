@@ -24,7 +24,14 @@
 /*** defines ***/
 
 # define MINIVIM_VER "0.1"
-# define TAB_SIZE 4
+
+# ifndef TAB_SIZE
+#  define TAB_SIZE 4
+# endif
+
+# ifndef CURSOR_HL
+#  define CURSOR_HL 1
+# endif
 
 # define CTRL_KEY(k) ((k) & 0x1f)
 # define APBUFF_INIT {NULL, 0}

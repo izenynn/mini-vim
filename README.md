@@ -8,8 +8,6 @@ It uses `VT100` escape characters (I will implement `ncurses` in the future prob
 
 P.S. I know they are way too much comments, sorry for that. I do this project for learning purpouses, so I comment everything I do for that reason ":D
 
-*NOTE: In terminals like alacritty that reverses the current cursor position color by default, the cursor highlighting may not workd as expected (probably you will not be able to see the cursor).*
-
 ## How to use
 
 Clone the repo
@@ -34,6 +32,12 @@ Open a file using minivim (it will create the file if it does not exists)
 
 ```sh
 ./minivim
+```
+
+*NOTE: if cursor highlighting is not working, that is probably becouse your terminal is reversing the cursor position color too, so it goes back to normal, to fix this, compile again with the variable CURSOR_HL=0 (disabled).*
+
+```sh
+make re CURSOR_HL=0
 ```
 
 ## How to install

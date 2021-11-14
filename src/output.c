@@ -65,7 +65,7 @@ void editor_draw_rows(struct apbuff *ab) {
 			int i;
 			for (i = 0; i < len; i++) {
 				/* handle cursor */
-				if (g_e.mode == NORMAL_MODE && y == g_e.cy - g_e.y_off && i == g_e.rx - g_e.x_off) {
+				if (CURSOR_HL && g_e.mode == NORMAL_MODE && y == g_e.cy - g_e.y_off && i == g_e.rx - g_e.x_off) {
 					/* change color on cursor position only */
 					apbuff_append(ab, "\x1b[m", 4);
 					apbuff_append(ab, "\x1b[7m", 4);
@@ -117,7 +117,7 @@ void editor_draw_rows(struct apbuff *ab) {
 				}
 			}
 			/* handle cursor on empty lines */
-			if (g_e.mode == NORMAL_MODE && y == g_e.cy - g_e.y_off && g_e.row[f_row].sz == 0) {
+			if (CURSOR_HL && g_e.mode == NORMAL_MODE && y == g_e.cy - g_e.y_off && g_e.row[f_row].sz == 0) {
 				apbuff_append(ab, "\x1b[m", 4);
 				apbuff_append(ab, "\x1b[7m", 4);
 				apbuff_append(ab, " ", 1);
