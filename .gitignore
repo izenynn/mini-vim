@@ -46,10 +46,6 @@
 *.mod*
 *.cmd
 .tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
 
 # MAC OS files
 .DS_Store
@@ -59,3 +55,21 @@ dkms.conf
 
 # VS code files
 .vscode
+**/.vscode
+
+# cache
+.cache
+**/.cache
+
+# bear
+compile_commands.json
+**/compile_commands.json
+
+# Miscellaneous
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+
+# Program name
+minivim
