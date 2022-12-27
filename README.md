@@ -82,7 +82,7 @@ Vim features:
 - `$`: move to last character in the line (also: end key).
 - `gg`: goto first line.
 - `G`: goto last line.
-- `:w`, `:q`, `:q!`, `:wq`: supported commands.
+- `:w`, `:q`, `:q!`, `:wq`, `x`: supported commands.
 - `:saveas [NAME]`: supported command.
 - `/[MATCH]`: supported command (`n` / `N`: move to next / previous occurrence).
 

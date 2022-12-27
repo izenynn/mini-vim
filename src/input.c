@@ -135,7 +135,7 @@ void editor_process_keypress() {
 				write(STDOUT_FILENO, "\x1b[H", 3);
 				exit(EXIT_SUCCESS);
 			/* save and exit */
-			} else if (!strcmp(cmd, "wq")) {
+			} else if (!strcmp(cmd, "wq") || !strcmp(cmd, "x")) {
 				/* save */
 				editor_save();
 				/* clear screen and move cursor before exit */
